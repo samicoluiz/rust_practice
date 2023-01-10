@@ -32,6 +32,7 @@ enum Transmission {
     Automatic
 }
 
+// Instanciando
 fn main() {
     let night_rider = car_factory("red".to_string(), Transmission::Automatic, false);
     println!("Car color: {}\nTransmission type: {:?}\nConvertible: {}", night_rider.color, night_rider.transmission, night_rider.convertible);

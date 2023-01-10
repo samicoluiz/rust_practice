@@ -4,14 +4,14 @@ struct Car {
     color: String,
     transmission: Transmission,
     convertible: bool,
-    mileage: u32,
+    age: (Age, u32),
 }
 
 // Build a "Car" by using values from the input arguments
 // - Color of car (String)
 // - Transmission type (enum value)
 // - Convertible (boolean, true if car is a convertible)
-fn car_factory(color: String, transmission: Transmission, convertible: bool) -> Car {
+fn car_factory(color: String, transmission: Transmission, convertible: bool, age: (Age, u32)) -> Car {
 
     // Use the values of the input arguments
     // All new cars always have zero mileage
@@ -19,7 +19,7 @@ fn car_factory(color: String, transmission: Transmission, convertible: bool) -> 
         color: color,
         transmission: transmission,
         convertible: convertible,
-        mileage: 0
+        age: age,
     }
 }
 
@@ -32,8 +32,14 @@ enum Transmission {
     Automatic
 }
 
+#[derive(PartialEq, Debug)]
+enum Age {
+    New,
+    Second_hand
+}
+
 // Instanciando
 fn main() {
-    let night_rider = car_factory("red".to_string(), Transmission::Automatic, false);
-    println!("Car color: {}\nTransmission type: {:?}\nConvertible: {}", night_rider.color, night_rider.transmission, night_rider.convertible);
+    let night_rider = car_factory("red".to_string(), Transmission::Automatic, false, (Age::Second_hand, 50000));
+    println!("Color: {}\nTransmission type: {:?}\nConvertible: {} \nAge: {:?}", night_rider.color, night_rider.transmission, night_rider.convertible, night_rider.age);
 }

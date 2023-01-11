@@ -31,11 +31,8 @@ fn car_factory(order: i32, miles: u32) -> Car {
     // Prevent panic: Check color index for colors array, reset as needed
     // Valid color = 1, 2, 3, or 4
     // If color > 4, reduce color to valid index
-    let mut color = order as usize;
-    if color > 4 {        
-        // color = 5 --> index 1, 6 --> 2, 7 --> 3, 8 --> 4
-        color = color - 4;
-    }
+    // Soved it using loops since using loops for this task seemed inadequate
+    let mut color = order as usize % 4;
 
     // Add variety to orders for motor type and roof type
     let mut motor = Transmission::Manual;
@@ -49,7 +46,7 @@ fn car_factory(order: i32, miles: u32) -> Car {
 
     // Return requested "Car"
     Car {
-        color: String::from(colors[(color-1) as usize]),
+        color: String::from(colors[(color) as usize]),
         motor: motor,
         roof: roof,
         age: car_quality(miles)
@@ -68,7 +65,7 @@ fn main() {
     // Call car_factory to fulfill order
     // Add order <K, V> pair to "orders" hash map
     // Call println! to show order details from the hash map
-    for i in 1..7 {
+    for i in 1..12 {
         // Reset miles for order variety
         if miles == 2100 {
             miles = 0;

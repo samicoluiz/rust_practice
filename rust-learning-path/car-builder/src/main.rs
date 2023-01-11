@@ -65,7 +65,7 @@ fn main() {
     // Call car_factory to fulfill order
     // Add order <K, V> pair to "orders" hash map
     // Call println! to show order details from the hash map
-    for i in 1..12 {
+    for i in 0..11 {
         // Reset miles for order variety
         if miles == 2100 {
             miles = 0;

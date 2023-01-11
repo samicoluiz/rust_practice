@@ -31,7 +31,7 @@ fn car_factory(order: i32, miles: u32) -> Car {
     // Prevent panic: Check color index for colors array, reset as needed
     // Valid color = 1, 2, 3, or 4
     // If color > 4, reduce color to valid index
-    // Soved it using loops since using loops for this task seemed inadequate
+    // Soved using loops since using loops for this task seemed inadequate
     let mut color = order as usize % 4;
 
     // Add variety to orders for motor type and roof type

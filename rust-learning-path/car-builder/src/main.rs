@@ -1,83 +1,92 @@
-// Declare Car struct to describe vehicle with four named fields
-#[derive(Debug)]
-struct Car {
-    color: String,
-    motor: Transmission,
-    roof: bool,
-    age: (Age, u32),
-}
-
-// Build a "Car" by using valumotores from the input arguments
-// - Color of car (String)
-// - Transmission type (enum value)
-// - Convertible (boolean, true if car is a convertible)
-fn car_factory(color: String, transmission: Transmission, convertible: bool, miles: u32) -> Car {
-    if car_quality(miles).0 == Age::Used {
-        if convertible {
-            println!("Prepare a used car: {:?}, {}, Hard top, {} miles\n", transmission, color, miles)
-        }
-    }
-    // Use the values of the input arguments
-    // All new cars always have zero mileage
-    Car {
-        color: color,
-        motor: transmission,
-        roof: convertible,
-        age: car_quality(miles),
-    }
-}
+#[derive(PartialEq, Debug)]
+struct Car { color: String, motor: Transmission, roof: bool, age: (Age, u32) }
 
 #[derive(PartialEq, Debug)]
-// Declare enum for Car transmission type
-enum Transmission {
-    // todo!("Fix enum definition so code compiles");
-    Manual,
-    SemiAuto,
-    Automatic
-}
+enum Transmission { Manual, SemiAuto, Automatic }
 
 #[derive(PartialEq, Debug)]
-enum Age {
-    New,
-    Used
-}
+enum Age { New, Used }
 
-// #[derive(PartialEq, Debug)]
-// enum Colors {
-//     Blue(&str),
-//     Green(&str),
-//     Red(&str),
-//     Silver(&str)
-// }
-
+// Get the car quality by testing the value of the input argument
+// - miles (u32)
+// Return tuple with car age ("New" or "Used") and mileage
 fn car_quality (miles: u32) -> (Age, u32) {
+
+    // Check if car has accumulated miles
+    // Return tuple early for Used car
     if miles > 0 {
-        return (Age::Used, miles)
-    } else {
-        return (Age::New, 0)
+        return (Age::Used, miles);
+    }
+
+    // Return tuple for New car, no need for "return" keyword or semicolon
+    (Age::New, miles)
+}
+
+// Build "Car" using input arguments
+fn car_factory(order: i32, miles: u32) -> Car {
+    let colors = ["Blue", "Green", "Red", "Silver"];
+
+    // Prevent panic: Check color index for colors array, reset as needed
+    // Valid color = 1, 2, 3, or 4
+    // If color > 4, reduce color to valid index
+    let mut color = order as usize;
+    if color > 4 {        
+        // color = 5 --> index 1, 6 --> 2, 7 --> 3, 8 --> 4
+        color = color - 4;
+    }
+
+    // Add variety to orders for motor type and roof type
+    let mut motor = Transmission::Manual;
+    let mut roof = true;
+    if order % 3 == 0 {          // 3, 6, 9
+        motor = Transmission::Automatic;
+    } else if order % 2 == 0 {   // 2, 4, 8, 10
+        motor = Transmission::SemiAuto;
+        roof = false;
+    }                            // 1, 5, 7, 11
+
+    // Return requested "Car"
+    Car {
+        color: String::from(colors[(color-1) as usize]),
+        motor: motor,
+        roof: roof,
+        age: car_quality(miles)
     }
 }
 
 fn main() {
-    let colors:[&str; 4] = ["blue", "green", "red", "silver"];
-    let mut car = car_factory("red".to_string(), Transmission::Automatic, false, 50000);
-    let mut engine: Transmission = Transmission::Manual;
-    
-    // Order 3 cars, one car for each type of transmission
+    // Initialize counter variable
+    let mut order = 1;
+    // Declare a car as mutable "Car" struct
+    let mut car: Car;
 
-    // Car order #1: New, Manual, Hard top
-    car = car_factory(String::from(colors[0]), engine, true, 0);
-    println!("Car order 1: {:?}, Hard top = {}, {:?}, {}, {} miles", car.age.0, car.roof, car.motor, car.color, car.age.1);
+    // Order 6 cars, increment "order" for each request
+    // Car order #1: Used, Hard top
+    car = car_factory(order, 1000);
+    println!("{}: {:?}, Hard top = {}, {:?}, {}, {} miles", order, car.age.0, car.roof, car.motor, car.color, car.age.1);
 
-    // Car order #2: Used, Semi-automatic, Convertible
-    engine = Transmission::SemiAuto;
-    car = car_factory(String::from(colors[1]), engine, false, 100);
-    println!("Car order 2: {:?}, Hard top = {}, {:?}, {}, {} miles", car.age.0, car.roof, car.motor, car.color, car.age.1);
+    // Car order #2: Used, Convertible
+    order = order + 1;
+    car = car_factory(order, 2000);
+    println!("{}: {:?}, Hard top = {}, {:?}, {}, {} miles", order, car.age.0, car.roof, car.motor, car.color, car.age.1);    
 
-    // Car order #3: Used, Automatic, Hard top
-    engine = Transmission::Automatic;
-    car = car_factory(String::from(colors[2]), engine, true, 200);
-    println!("Car order 3: {:?}, Hard top = {}, {:?}, {}, {} miles", car.age.0, car.roof, car.motor, car.color, car.age.1);
-    
-    // println!("Color: {}\nTransmission type: {:?}\nConvertible: {} \nAge: {:?}", car.color, car.transmission, car.convertible, car.age);
+    // Car order #3: New, Hard top
+    order = order + 1;
+    car = car_factory(order, 0);
+    println!("{}: {:?}, Hard top = {}, {:?}, {}, {} miles", order, car.age.0, car.roof, car.motor, car.color, car.age.1);
+
+    // Car order #4: New, Convertible
+    order = order + 1;
+    car = car_factory(order, 0);
+    println!("{}: {:?}, Hard top = {}, {:?}, {}, {} miles", order, car.age.0, car.roof, car.motor, car.color, car.age.1);
+
+    // Car order #5: Used, Hard top
+    order = order + 1;
+    car = car_factory(order, 3000);
+    println!("{}: {:?}, Hard top = {}, {:?}, {}, {} miles", order, car.age.0, car.roof, car.motor, car.color, car.age.1);
+
+    // Car order #6: Used, Hard top
+    order = order + 1;
+    car = car_factory(order, 4000);
+    println!("{}: {:?}, Hard top = {}, {:?}, {}, {} miles", order, car.age.0, car.roof, car.motor, car.color, car.age.1);
 }
